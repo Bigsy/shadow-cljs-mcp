@@ -100,6 +100,17 @@ class ShadowCLJSMonitor {
               const compiledMatch = changes.match(/:compiled => (\d+)/);
               const warningsMatch = changes.match(/:warnings => \[([^\]]*)\]/);
               const durationMatch = changes.match(/:duration => ([\d.]+)/);
+              const logMatch = changes.match(/log => \[(.*?)\]/);
+              
+              // Extract compiled files from log
+              const compiledFiles = [];
+              if (logMatch) {
+                const logContent = logMatch[1];
+                const compileMatches = logContent.match(/Compile CLJS: ([^,]+)/g);
+                if (compileMatches) {
+                  compiledFiles.push(...compileMatches.map(m => m.replace('Compile CLJS: ', '')));
+                }
+              }
 
               if (resourcesMatch && compiledMatch && warningsMatch && durationMatch) {
                 this.lastBuildStatus = {
@@ -108,7 +119,8 @@ class ShadowCLJSMonitor {
                   compiled: parseInt(compiledMatch[1]),
                   warnings: warningsMatch[1].length ? warningsMatch[1].split(',').length : 0,
                   duration: parseFloat(durationMatch[1]),
-                  timestamp: new Date().toISOString()
+                  timestamp: new Date().toISOString(),
+                  compiledFiles: compiledFiles
                 };
               }
             }
