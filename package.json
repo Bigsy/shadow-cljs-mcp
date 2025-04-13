@@ -1,20 +1,46 @@
 {
   "name": "shadow-cljs-mcp",
-  "version": "0.1.0",
-  "description": "A Model Context Protocol server for shadow-cljs build status",
-  "private": true,
+  "version": "0.1.1",
+  "description": "A Model Context Protocol server for monitoring shadow-cljs builds",
   "main": "index.js",
   "type": "module",
   "bin": {
     "shadow-cljs-mcp": "./index.js"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "prepublishOnly": "npm test",
+    "test": "echo \"No tests specified\" && exit 0",
+    "publish": "npm publish --access public"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.8.0",
     "ws": "^8.18.1",
     "transit-js": "^0.8.874",
     "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/ws": "^8.0.0"
+  },
+  "files": [
+    "index.js",
+    "README.md"
+  ],
+  "keywords": [
+    "mcp",
+    "shadow-cljs",
+    "model-context-protocol",
+    "clojurescript",
+    "build-monitor"
+  ],
+  "author": "ModelContextProtocol",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Bigsy/shadow-cljs-mcp"
+  },
+  "engines": {
+    "node": ">=14"
   }
 }
