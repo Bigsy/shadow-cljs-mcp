@@ -1,0 +1,20 @@
+{
+  "name": "shadow-cljs-mcp",
+  "version": "0.1.0",
+  "description": "A Model Context Protocol server for shadow-cljs build status",
+  "private": true,
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "shadow-cljs-mcp": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.8.0",
+    "ws": "^8.18.1",
+    "transit-js": "^0.8.874",
+    "node-fetch": "^3.3.2"
+  }
+}
