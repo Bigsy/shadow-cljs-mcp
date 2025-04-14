@@ -13,10 +13,26 @@ Add the following to your Cline/Cursor/Claude whatever settings:
     "shadow-cljs-mcp": {
       "command": "npx",
       "args": [
+        "shadow-cljs-mcp"
+      ],
+      "disabled": false,
+      "autoApprove": [],
+      "timeout": 60
+    }
+  }
+}
+```
+With optional server location
+```json
+{
+  "mcpServers": {
+    "shadow-cljs-mcp": {
+      "command": "npx",
+      "args": [
         "shadow-cljs-mcp",
-        "--host",     // Optional: defaults to "localhost"
+        "--host",
         "localhost",
-        "--port",     // Optional: defaults to 9630
+        "--port",
         "9630"
       ],
       "disabled": false,
