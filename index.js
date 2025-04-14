@@ -7,11 +7,13 @@ import transit from 'transit-js';
 import fetch from 'node-fetch';
 
 class ShadowCLJSMonitor {
-  constructor() {
+  constructor(host = 'localhost', port = 9630) {
     this.lastBuildStatus = null;
     this.writer = transit.writer('json');
     this.reader = transit.reader('json');
     this.connected = false;
+    this.host = host;
+    this.port = port;
   }
 
   transitMapToObject(map) {
@@ -41,22 +43,18 @@ class ShadowCLJSMonitor {
 
   async getServerToken() {
     while (true) {
-      const ports = [9630];
-      
-      for (const port of ports) {
-        try {
-          console.log(`Trying to connect to shadow-cljs on port ${port}...`);
-          const response = await fetch(`http://localhost:${port}`);
-          const html = await response.text();
-          
-          const tokenMatch = html.match(/<meta\s+content="([^"]+)"\s+name="shadow-remote-token"/);
-          if (tokenMatch && tokenMatch[1]) {
-            console.log(`Successfully connected to port ${port}`);
-            return { token: tokenMatch[1], port };
-          }
-        } catch (err) {
-          console.log(`Could not connect to port ${port}: ${err.message}`);
+      try {
+        console.log(`Trying to connect to shadow-cljs at ${this.host}:${this.port}...`);
+        const response = await fetch(`http://${this.host}:${this.port}`);
+        const html = await response.text();
+        
+        const tokenMatch = html.match(/<meta\s+content="([^"]+)"\s+name="shadow-remote-token"/);
+        if (tokenMatch && tokenMatch[1]) {
+          console.log(`Successfully connected to ${this.host}:${this.port}`);
+          return { token: tokenMatch[1], port: this.port };
         }
+      } catch (err) {
+        console.log(`Could not connect to ${this.host}:${this.port}: ${err.message}`);
       }
       console.log('Could not connect to shadow-cljs server, retrying in 2 seconds...');
       await new Promise(resolve => setTimeout(resolve, 2000));
@@ -65,7 +63,7 @@ class ShadowCLJSMonitor {
 
   async initWebSocket() {
     const { token, port } = await this.getServerToken();
-    const ws = new WebSocket(`ws://localhost:${port}/api/remote-relay?id=shadow-cljs-monitor&server-token=${token}`);
+    const ws = new WebSocket(`ws://${this.host}:${port}/api/remote-relay?id=shadow-cljs-monitor&server-token=${token}`);
     
     ws.on('open', () => {
       this.connected = true;
@@ -156,7 +154,23 @@ class ShadowCLJSMonitor {
 
 class ShadowCLJSServer {
   constructor() {
-    this.monitor = new ShadowCLJSMonitor();
+    // Get arguments from process.argv
+    const args = process.argv.slice(2);
+    let host = 'localhost';
+    let port = 9630;
+
+    // Parse arguments looking for --host and --port
+    for (let i = 0; i < args.length; i++) {
+      if (args[i] === '--host' && i + 1 < args.length) {
+        host = args[i + 1];
+        i++;
+      } else if (args[i] === '--port' && i + 1 < args.length) {
+        port = parseInt(args[i + 1], 10);
+        i++;
+      }
+    }
+
+    this.monitor = new ShadowCLJSMonitor(host, port);
     this.server = new Server(
       {
         name: "shadow-cljs-mcp",

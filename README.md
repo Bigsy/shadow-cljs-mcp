@@ -12,7 +12,13 @@ Add the following to your Cline/Cursor/Claude whatever settings:
   "mcpServers": {
     "shadow-cljs-mcp": {
       "command": "npx",
-      "args": ["shadow-cljs-mcp"],
+      "args": [
+        "shadow-cljs-mcp",
+        "--host",     // Optional: defaults to "localhost"
+        "localhost",
+        "--port",     // Optional: defaults to 9630
+        "9630"
+      ],
       "disabled": false,
       "autoApprove": [],
       "timeout": 60
@@ -21,14 +27,11 @@ Add the following to your Cline/Cursor/Claude whatever settings:
 }
 ```
 
+The `--host` and `--port` arguments are optional. If not provided, the server will default to connecting to `localhost:9630`.
+
 ## Overview
 
 This MCP server connects to a running shadow-cljs instance and tracks build progress, failures, and completions. It provides an MCP tool that LLMs can use to verify build status after making changes to ClojureScript files.
-
-## Known Limitations
-
-- Currently only connects to the default shadow-cljs address (localhost) and port (9630)
-- Custom server addresses or ports are not yet supported
 
 ## LLM Integration
 
@@ -86,7 +89,7 @@ Failed build:
 - LLMs should call get_last_build_status after each ClojureScript file edit
 - Compilation errors will be shown in detail for easy debugging
 - Successful builds show which files were compiled and how long they took
-- Make sure shadow-cljs is running on port 9630 before starting this server
+- Make sure shadow-cljs is running before starting this server
 
 ## Requirements
-- Running shadow-cljs instance on default port (9630)
+- Running shadow-cljs instance (defaults to localhost:9630 if not configured otherwise)
