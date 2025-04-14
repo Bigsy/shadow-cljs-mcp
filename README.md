@@ -1,11 +1,21 @@
 # shadow-cljs-mcp
 
+[![smithery badge](https://smithery.ai/badge/@Bigsy/shadow-cljs-mcp)](https://smithery.ai/server/@Bigsy/shadow-cljs-mcp)
 [![npm version](https://badge.fury.io/js/shadow-cljs-mcp.svg)](https://badge.fury.io/js/shadow-cljs-mcp)
 
 A Model Context Protocol (MCP) server that monitors shadow-cljs builds and provides real-time build status updates.
 
 ## Installation
 
+### Installing via Smithery
+
+To install shadow-cljs-mcp for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@Bigsy/shadow-cljs-mcp):
+
+```bash
+npx -y @smithery/cli install @Bigsy/shadow-cljs-mcp --client claude
+```
+
+### Manual Installation
 Add the following to your Cline/Cursor/Claude whatever settings:
 ```json
 {
