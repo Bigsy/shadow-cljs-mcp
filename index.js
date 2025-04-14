@@ -11,6 +11,7 @@ class ShadowCLJSMonitor {
     this.lastBuildStatus = null;
     this.writer = transit.writer('json');
     this.reader = transit.reader('json');
+    this.connected = false;
   }
 
   transitMapToObject(map) {
@@ -26,10 +27,15 @@ class ShadowCLJSMonitor {
   }
 
   getLastBuildStatus() {
-    return this.lastBuildStatus || {
+    const status = this.lastBuildStatus || {
       status: 'unknown',
       message: 'No build status available yet',
       timestamp: new Date().toISOString()
+    };
+    
+    return {
+      ...status,
+      websocket_connected: this.connected
     };
   }
 
@@ -62,6 +68,7 @@ class ShadowCLJSMonitor {
     const ws = new WebSocket(`ws://localhost:${port}/api/remote-relay?id=shadow-cljs-monitor&server-token=${token}`);
     
     ws.on('open', () => {
+      this.connected = true;
       const helloMsg = transit.map([
         transit.keyword('op'), transit.keyword('hello'),
         transit.keyword('client-info'), transit.map([
@@ -141,6 +148,7 @@ class ShadowCLJSMonitor {
     });
 
     ws.on('close', () => {
+      this.connected = false;
       setTimeout(() => this.initWebSocket(), 2000);
     });
   }
@@ -202,9 +210,13 @@ class ShadowCLJSServer {
 
   async run() {
     const transport = new StdioServerTransport();
-    await this.monitor.initWebSocket();
     await this.server.connect(transport);
     console.error('Shadow CLJS MCP server running on stdio');
+    
+    // Start WebSocket connection in the background
+    this.monitor.initWebSocket().catch(err => {
+      console.error('Failed to initialize WebSocket:', err);
+    });
   }
 }
 
