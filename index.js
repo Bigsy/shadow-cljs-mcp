@@ -134,7 +134,8 @@ class ShadowCLJSMonitor {
                     wibblw: 1,
                     active: buildStatus[':active'] || {},
                     log: (buildStatus[':log'] || []).filter(entry => entry.startsWith('Compile CLJS:')),
-                    warnings: Array.isArray(buildStatus[':warnings']) ? buildStatus[':warnings'] : []
+                    warnings: Array.isArray(buildStatus[':warnings']) ? buildStatus[':warnings'] : [],
+                    report: buildStatus[':report']
                   };
                   console.log('[Build Status Updated]:', JSON.stringify(this.lastBuildStatus, null, 2));
                 }
