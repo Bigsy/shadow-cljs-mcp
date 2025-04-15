@@ -111,35 +111,31 @@ class ShadowCLJSMonitor {
             console.log('\n[DB Update Message]');
             console.log('Raw message:', JSON.stringify(msg, null, 2));
             const changes = msg[':changes'];
-            if (!changes) {
-              console.log('No changes found in message');
-            } else if (typeof changes !== 'string') {
-              console.log('Changes is not a string:', typeof changes, changes);
-            } else {
-              if (changes.includes(':status => :failed')) {
-                console.log('[DB Update] Build failed');
-                this.lastBuildStatus = {
-                  status: 'failed',
-                  message: 'Build failed',
-                  details: msg,
-                  timestamp: new Date().toISOString()
-                };
-              } else if (changes.includes(':status => :completed')) {
-                console.log('[DB Update] Build completed');
-                const resourcesMatch = changes.match(/:resources => (\d+)/);
-                const compiledMatch = changes.match(/:compiled => (\d+)/);
-                const warningsMatch = changes.match(/:warnings => \[([^\]]*)\]/);
-                const durationMatch = changes.match(/:duration => ([\d.]+)/);
+            if (!changes || !Array.isArray(changes)) {
+              console.log('No valid changes found in message');
+              return;
+            }
 
-                if (resourcesMatch && compiledMatch && warningsMatch && durationMatch) {
+            // Process each change in the changes array
+            for (const change of changes) {
+              if (Array.isArray(change) && 
+                  change[0] === ':entity-update' && 
+                  change[1] === ':shadow.cljs/build' &&
+                  change[3] === ':shadow.cljs/build-status') {
+                
+                const buildStatus = change[4];
+                if (buildStatus && typeof buildStatus === 'object') {
                   this.lastBuildStatus = {
-                    status: 'completed',
-                    resources: parseInt(resourcesMatch[1]),
-                    compiled: parseInt(compiledMatch[1]),
-                    warnings: warningsMatch[1].length ? warningsMatch[1].split(',').length : 0,
-                    duration: parseFloat(durationMatch[1]),
-                    timestamp: new Date().toISOString()
+                    status: buildStatus[':status']?.toString().replace(':', '') || 'unknown',
+                    timestamp: new Date().toISOString(),
+                    resources: parseInt(buildStatus[':resources']) || 0,
+                    compiled: parseInt(buildStatus[':compiled']) || 0,
+                    duration: parseFloat(buildStatus[':duration']) || 0,
+                    active: buildStatus[':active'] || {},
+                    log: buildStatus[':log'] || [],
+                    warnings: Array.isArray(buildStatus[':warnings']) ? buildStatus[':warnings'] : []
                   };
+                  console.log('[Build Status Updated]:', JSON.stringify(this.lastBuildStatus, null, 2));
                 }
               }
             }
@@ -219,9 +215,33 @@ class ShadowCLJSMonitor {
   }
 
   handleBuildStatusUpdate(msg) {
-    console.log('\n[Build Message Received]');
-    console.log('Raw message:', JSON.stringify(msg, null, 2));
+    console.error('\n[Build Message Received]');
+    console.error('Raw message:', JSON.stringify(msg, null, 2));
     
+    // Handle new message format
+    if (Array.isArray(msg)) {
+      const msgType = msg[0];
+      const buildId = msg[2];
+      const buildStatus = msg[4];
+      
+      if (msgType === ':entity-update' && buildStatus && typeof buildStatus === 'object') {
+        this.lastBuildStatus = {
+          buildId: buildId,
+          status: buildStatus[':status']?.replace(':', '') || 'unknown',
+          timestamp: new Date().toISOString(),
+          resources: parseInt(buildStatus[':resources']) || 0,
+          compiled: parseInt(buildStatus[':compiled']) || 0,
+          duration: parseFloat(buildStatus[':duration']) || null,
+          active: buildStatus[':active'] || {},
+          log: buildStatus[':log'] || [],
+          warnings: buildStatus[':warnings'] || []
+        };
+        console.error('[Build Status Updated]:', JSON.stringify(this.lastBuildStatus, null, 2));
+        return;
+      }
+    }
+    
+    // Handle old message format
     const buildStatus = msg[':build-status'];
     const buildId = msg[':build-id'];
     if (buildStatus) {
@@ -229,7 +249,7 @@ class ShadowCLJSMonitor {
       const info = buildStatus[':info'] || {};
       const timings = info[':timings'] || {};
       
-      console.log(`[Build Status Update] Build ID: ${buildId}, Status: ${status}`);
+      console.error(`[Build Status Update] Build ID: ${buildId}, Status: ${status}`);
       
       // Calculate build duration if available
       let duration = null;
@@ -237,7 +257,7 @@ class ShadowCLJSMonitor {
         duration = (
           parseInt(timings[':compile-finish'][':exit']) - 
           parseInt(timings[':compile-prepare'][':enter'])
-        ) / 1000.0; // Convert to seconds
+        ) / 1000.0;
       }
       
       this.lastBuildStatus = {
@@ -253,6 +273,7 @@ class ShadowCLJSMonitor {
         warnings: buildStatus[':warnings'] || [],
         cycle: info[':compile-cycle']
       };
+      console.error('[Build Status Updated]:', JSON.stringify(this.lastBuildStatus, null, 2));
     }
   }
 }
