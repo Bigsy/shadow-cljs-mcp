@@ -1,131 +1,46 @@
-Web socket startup hand shake
-["^ ","~:op","~:welcome","~:client-id",21]	42	
-18:54:10.587
-["^ ","~:op","~:hello","~:client-info",["^ ","~:type","~:shadow-cljs-ui"]]	74	
-18:54:10.587
-["^ ","~:op","~:shadow.cljs.model/load-ui-options","~:to",1]	60	
-18:54:10.587
-["^ ","~:op","~:shadow.cljs.model/subscribe","~:to",1,"~:shadow.cljs.model/topic","~:shadow.cljs.model/supervisor"]	115	
-18:54:10.587
-["^ ","~:op","~:shadow.cljs.model/subscribe","~:to",1,"~:shadow.cljs.model/topic","~:shadow.cljs.model/build-status-update"]	124	
-18:54:10.587
-["^ ","~:op","~:request-clients","~:notify",true,"~:query",["~:eq","~:type","~:runtime"]]	89	
-18:54:10.793
-["^ ","~:op","~:shadow.cljs.model/ui-options","~:ui-options",null,"~:from",1]	77	
-18:54:10.793
-["^ ","~:op","~:clients","^1",[["^ ","~:client-id",1,"~:client-info",["^ ","~:connection-info",["^ "],"~:since","~m1744738197405","~:type","~:runtime","~:lang","~:clj","~:desc","JVM Clojure Runtime"]],["^ ","^2",5,"^3",["^ ","^5","~m1744738363692","~:proc-id","dc4d31e6-e01c-4b25-a688-9d7945151bd4","^4",["^ ","~:remote",true,"~:websocket",true],"~:user-agent","Chrome 537.36 [MacIntel]","^6","^7","^8","~:cljs","~:build-id","~:dev","~:host","~:browser","~:worker-id",2,"~:dom",true]]]]	486	
-18:54:10.819
-["^ ","~:op","~:request-supported-ops","~:to",["~#set",[1,5]]]	62	
-18:54:10.824
-["^ ","~:op","~:supported-ops","~:ops",["~#set",["~:shadow.cljs.model/build-release-debug!","~:ping","~:shadow.cljs.model/build-watch-start!","~:tap-unsubscribe","~:obj-forget","~:shadow.cljs.model/build-compile!","~:shadow.cljs.devtools.server.remote-ext/runtime-update","~:shadow.cljs.model/subscribe","~:obj-describe","~:tap-subscribe","~:request-tap-history","~:obj-ex-str","~:obj-request","~:obj-edn","~:obj-pprint","~:explore/namespace-vars","~:shadow.cljs.model/load-ui-options","~:obj-get-value","~:explore/namespaces","~:obj-forget-all","~:clj-eval","~:explore/describe-var","~:shadow.cljs.model/build-watch-stop!","~:obj-fragment","~:explore/describe-ns","~:obj-edn-limit","~:obj-str","~:obj-nav","~:shadow.cljs.model/build-release!","~:shadow.cljs.model/build-watch-compile!"]],"~:from",1]	800	
-18:54:10.829
-["^ ","~:op","~:tap-subscribe","~:to",1,"~:history",true,"~:num",50]	68	
-18:54:10.832
-["^ ","~:op","~:supported-ops","~:ops",["~#set",["~:ping","~:shadow.cljs.devtools.client.env/worker-notify","~:tap-unsubscribe","~:obj-forget","~:cljs-asset-update","~:cljs-build-start","~:runtime-print-unsub","~:obj-describe","~:cljs-build-complete","~:cljs-eval","~:tap-subscribe","~:request-tap-history","~:obj-ex-str","~:obj-request","~:obj-edn","~:obj-pprint","~:cljs-build-failure","~:obj-get-value","~:obj-forget-all","~:js-eval","~:shadow.cljs.devtools.client.shared/runtime-print-disconnect","~:runtime-print-sub","~:obj-fragment","~:obj-edn-limit","~:cljs-build-configure","~:obj-str","~:obj-nav","~:access-denied"]],"~:from",5]	638	
-18:54:10.833
-["^ ","~:op","~:tap-subscribe","~:to",5,"~:history",true,"~:num",50]	68	
-18:54:10.834
-["^ ","~:op","~:tap-subscribed","~:history",[],"~:from",1]	58	
-18:54:10.849
-["^ ","~:op","~:tap-subscribed","~:history",[],"~:from",5]	58	
-18:54:10.852
-["^ ","~:op","~:shadow.cljs.model/build-watch-compile!","~:to",1,"~:shadow.cljs.model/build-id","~:dev"]	104	
-18:54:15.433
-["^ ","~:build-id","~:dev","~:build-status",["^ ","~:status","~:compiling","~:active",["^ ","~i1143",["^ ","~:stage","~:flush","~:shadow.build.log/level","~:info","~:shadow.cljs.model/msg","build target: :browser stage: :flush","~:start",1744739655453,"~:type","~:shadow.build/process-stage","~:timing","~:enter","~:timing-id",1143,"~:depth",0,"~:target","~:browser"],"~i1144",["^ ","^=","~:flush-unoptimized","^?","^@","^A",1144,"^<",1744739655454,"^B",1,"^9","^:","^;","Flushing unoptimized modules"]],"~:resources",196,"~:compiled",2],"~:shadow.cljs.model/topic","~:shadow.cljs.model/build-status-update","~:op","~:shadow.cljs.model/sub-msg","~:from",1]	656	
-18:54:15.455
-
-
-
-
-BUILD complete
-[Build Status Update]: {
+{
   "buildId": ":dev",
   "status": "completed",
-  "timestamp": "2025-04-15T18:11:26.345Z",
+  "timestamp": "2025-04-15T19:04:22.012Z",
   "resources": "196",
   "compiled": "2",
-  "duration": 0.148,
+  "duration": 0.759,
   "active": {},
   "log": [
-    "Resolving Module: :main (2ms)",
+    "Resolving Module: :main (8ms)",
     "build target: :browser stage: :compile-prepare (0ms)",
-    "Compile CLJS: dev.cljc (5ms)",
-    "Cache write: dev.cljc (18ms)",
-    "Compile CLJS: electric_starter_app/main.cljc (107ms)",
-    "Cache write: electric_starter_app/main.cljc (18ms)",
+    "Compile CLJS: dev.cljc (131ms)",
+    "Cache write: dev.cljc (40ms)",
+    "Compile CLJS: electric_starter_app/main.cljc (688ms)",
+    "Cache write: electric_starter_app/main.cljc (27ms)",
     "build target: :browser stage: :compile-finish (0ms)",
-    "build hook: [0 hyperfiddle.electric.shadow-cljs.hooks/reload-clj] stage: :compile-finish (15ms)",
-    "Flush: shadow/module/main/append.js (1ms)",
-    "Flush: dev.cljc (1ms)",
+    "build hook: [0 hyperfiddle.electric.shadow-cljs.hooks/reload-clj] stage: :compile-finish (27ms)",
+    "Flush: shadow/module/main/append.js (0ms)",
+    "Flush: dev.cljc (0ms)",
     "Flushing unoptimized modules (2ms)",
-    "build target: :browser stage: :flush (3ms)",
-    "Flush: electric_starter_app/main.cljc (3ms)"
+    "build target: :browser stage: :flush (5ms)",
+    "Flush: electric_starter_app/main.cljc (2ms)"
   ],
   "warnings": [],
-  "cycle": "20"
+  "cycle": "1",
+  "websocket_connected": true
 }
 
+make it just this 
 
-BUILD failed
-[Build Status Update]: {
+{
   "buildId": ":dev",
-  "status": "failed",
-  "timestamp": "2025-04-15T18:13:15.508Z",
+  "status": "completed",
+  "timestamp": "2025-04-15T19:04:22.012Z",
   "resources": "196",
   "compiled": "2",
-  "duration": null,
-  "active": {
-    "1259": {
-      ":shadow.build.log/level": ":info",
-      ":shadow.cljs.model/msg": "Compile CLJS: electric_starter_app/main.cljc",
-      ":resource-id": [
-        ":shadow.build.classpath/resource",
-        "electric_starter_app/main.cljc"
-      ],
-      ":start": "1744740795483",
-      ":resource-name": "electric_starter_app/main.cljc",
-      ":type": ":compile-cljs",
-      ":timing": ":enter",
-      ":timing-id": "1259",
-      ":depth": 0
-    }
-  },
+  "duration": 0.759,
+  "active": {},
   "log": [
-    "Resolving Module: :main (2ms)",
-    "build target: :browser stage: :compile-prepare (0ms)"
+    "Compile CLJS: dev.cljc (131ms)",
+    "Compile CLJS: electric_starter_app/main.cljc (688ms)",
   ],
-  "report": "------ ERROR -------------------------------------------------------------------\n File: /Users/hedworth/workspace/mystuff/electric-v2-starter-app/src/electric_starter_app/main.cljc:7:1\n--------------------------------------------------------------------------------\n   4 | \n   5 | ;; Saving this file will automatically recompile and update in your browser\n   6 | \n   7 | (e/defn Main [ring-request]\n-------^------------------------------------------------------------------------\nnull\nin Main: (dom/tex \"Make sures you wechecsks the \")\nI cannot resolve `dom/tex`, maybe it's defined only on the server?\nIf `dom/tex` is supposed to be a macro, you might need to :refer it in the :require-macros clause.\n{:form dom/tex, :in Main, :for [:client :client], :locals (Main ring-request)}\nExceptionInfo: in Main: (dom/tex \"Make sures you wechecsks the \")\nI cannot resolve `dom/tex`, maybe it's defined only on the server?\nIf `dom/tex` is supposed to be a macro, you might need to :refer it in the :require-macros clause.\n\thyperfiddle.electric.impl.lang/fail! (lang.clj:148)\n\thyperfiddle.electric.impl.lang/fail! (lang.clj:146)\n\thyperfiddle.electric.impl.lang/cannot-resolve! (lang.clj:152)\n\thyperfiddle.electric.impl.lang/cannot-resolve! (lang.clj:151)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:578)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:545)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me/rec--7774 (lang.clj:408)\n\thyperfiddle.electric.impl.lang/analyze-me/rec--7774 (lang.clj:410)\n\thyperfiddle.electric.impl.lang/analyze-me/rec--7774 (lang.clj:410)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:407)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:519)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me/fn--7879 (lang.clj:546)\n\tclojure.core/mapv/fn--8549 (core.clj:7001)\n\tclojure.lang.PersistentVector$ChunkedSeq.reduce (PersistentVector.java:476)\n\tclojure.core/reduce (core.clj:6907)\n\tclojure.core/mapv (core.clj:6992)\n\tclojure.core/mapv (core.clj:6992)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:546)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-binding/rec--7606 (lang.clj:162)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:160)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:159)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:457)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me/rec--7774 (lang.clj:408)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:407)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\tclojure.core/apply (core.clj:669)\n\tclojure.core/apply (core.clj:662)\n\thyperfiddle.electric.impl.lang/analyze-binding/rec--7606 (lang.clj:173)\n\thyperfiddle.electric.impl.lang/analyze-binding/rec--7606 (lang.clj:163)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:160)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:159)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:536)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me/rec--7774 (lang.clj:408)\n\thyperfiddle.electric.impl.lang/analyze-me/rec--7774 (lang.clj:410)\n\thyperfiddle.electric.impl.lang/analyze-me/rec--7774 (lang.clj:410)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:407)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\tclojure.core/apply (core.clj:669)\n\tclojure.core/apply (core.clj:662)\n\thyperfiddle.electric.impl.lang/analyze-binding/rec--7606 (lang.clj:173)\n\thyperfiddle.electric.impl.lang/analyze-binding/rec--7606 (lang.clj:163)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:160)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:159)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:536)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me/rec--7774 (lang.clj:408)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:407)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me/rec--7774 (lang.clj:408)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:407)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me/rec--7800 (lang.clj:403)\n\thyperfiddle.electric.impl.lang/analyze-me/rec--7800 (lang.clj:401)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:396)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:519)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-case/fn--7621 (lang.clj:186)\n\tclojure.core/apply (core.clj:669)\n\tclojure.core/apply (core.clj:662)\n\thyperfiddle.electric.impl.lang/analyze-binding/rec--7606 (lang.clj:173)\n\thyperfiddle.electric.impl.lang/analyze-binding/rec--7606 (lang.clj:163)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:160)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:159)\n\thyperfiddle.electric.impl.lang/analyze-case (lang.clj:181)\n\thyperfiddle.electric.impl.lang/analyze-case (lang.clj:175)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:414)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:519)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-binding/rec--7606 (lang.clj:162)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:160)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:159)\n\n--------------------------------------------------------------------------------\n   8 |   (e/client\n   9 |     (binding [dom/node js/document.body]\n  10 |       (dom/h1 (dom/text \"Hello from Electric Clojure\"))\n  11 |       (dom/p (dom/text \"Sourcse cosdew sfor this pages is idsdsn \")\n--------------------------------------------------------------------------------\n",
-  "warnings": []
+  "warnings": [],
+  "cycle": "1",
+  "websocket_connected": true
 }
-
-
-unifir init 
-["^ ","~:op","~:welcome","~:client-id",6]	41	
-19:31:12.325
-["^ ","~:op","~:hello","~:client-info",["^ ","~:type","~:shadow-cljs-ui"]]	74	
-19:31:12.326
-["^ ","~:op","~:shadow.cljs/load-ui-options","~:to",1]	54	
-19:31:12.326
-["^ ","~:op","~:shadow.cljs/db-sync-init!","~:to",1]	52	
-19:31:12.326
-["^ ","~:op","~:request-clients","~:notify",true,"~:query",["~:eq","~:type","~:runtime"]]	89	
-19:31:12.351
-["^ ","~:op","~:shadow.cljs/db-sync","~:shadow.cljs/builds",[["^ ","~:shadow.cljs/build-id","~:npm","~:shadow.cljs/build-config-raw",["^ ","~:build-id","^4","~:target","~:npm-module","~:output-dir","node_modules/shadow-cljs"]],["^ ","^3","~:shadow-dev","^5",["^ ","^7","~:browser","~:devtools",["^ ","~:loader-mode","~:default","~:watch-dir","resources/public/electric"],"~:dev-http",["^ ","~i9630",["^ ","~:root","resources/public","~:host","localhost"]],"^9","resources/public/electric/dashboard/js","~:asset-path","/dashboard/js","~:modules",["^ ","~:main",["^ ","~:entries",["~$unifhir.dashboard.core"],"~:init-fn","~$unifhir.dashboard.core/start-dev!"]],"~:build-hooks",[["~#list",["~$hyperfiddle.electric.shadow-cljs.hooks/reload-clj"]]],"^6","^:"],"~:shadow.cljs/build-worker-active",true,"~:shadow.cljs/build-status",["^ ","~:status","~:failed","~:active",["^ ","~i547",["^ ","~:shadow.build.log/level","~:info","~:resource-id",["~:shadow.build.classpath/resource","unifhir/dashboard/ui/views/patient_groups/patient_groups_widget.cljc"],"~:start",1744741833982,"~:resource-name","unifhir/dashboard/ui/views/patient_groups/patient_groups_widget.cljc","~:shadow.cljs/msg","Compile CLJS: unifhir/dashboard/ui/views/patient_groups/patient_groups_widget.cljc","~:type","~:compile-cljs","~:timing","~:enter","~:timing-id",547,"~:depth",0]],"~:log",["Resolving Module: :main (6ms)","build target: :browser stage: :compile-prepare (0ms)"],"~:resources",317,"~:compiled",0,"~:report","------ ERROR -------------------------------------------------------------------\n File: /Users/hedworth/d/unifhir/src/unifhir/dashboard/ui/views/patient_groups/patient_groups_widget.cljc:17:1\n--------------------------------------------------------------------------------\n 14 | \n 15 | (e/def dirty (e/server (e/watch db/!dirty)))\n 16 | \n 17 | (e/defn PatientGroupsWidget [ehr-id]\n-------^------------------------------------------------------------------------\nnull\nin PatientGroupsWidget: (rfe/navigat :patient-groups)\nI cannot resolve `rfe/navigat`, maybe it's defined only on the server?\nIf `rfe/navigat` is supposed to be a macro, you might need to :refer it in the :require-macros clause.\n{:form rfe/navigat, :in PatientGroupsWidget, :for [:client :client], :locals (mbx__28656__auto__ progressing-event__28658__auto__ active-count state__28680__auto__ PatientGroupsWidget vec__102574 !i__28677__auto__ !state__28679__auto__ _ ehr-id e__29039__auto__ xs__28422__auto__ pges !show-patient-groups i__28678__auto__ show-patient-groups)}\nExceptionInfo: in PatientGroupsWidget: (rfe/navigat :patient-groups)\nI cannot resolve `rfe/navigat`, maybe it's defined only on the server?\nIf `rfe/navigat` is supposed to be a macro, you might need to :refer it in the :require-macros clause.\n\thyperfiddle.electric.impl.lang/fail! (lang.clj:148)\n\thyperfiddle.electric.impl.lang/fail! (lang.clj:146)\n\thyperfiddle.electric.impl.lang/cannot-resolve! (lang.clj:152)\n\thyperfiddle.electric.impl.lang/cannot-resolve! (lang.clj:151)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:578)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:545)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me/rec--26937 (lang.clj:408)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:407)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me/rec--26963 (lang.clj:403)\n\thyperfiddle.electric.impl.lang/analyze-me/rec--26963 (lang.clj:401)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:396)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:519)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-case/fn--26784 (lang.clj:186)\n\tclojure.core/apply (core.clj:669)\n\tclojure.core/apply (core.clj:662)\n\thyperfiddle.electric.impl.lang/analyze-binding/rec--26769 (lang.clj:173)\n\thyperfiddle.electric.impl.lang/analyze-binding/rec--26769 (lang.clj:163)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:160)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:159)\n\thyperfiddle.electric.impl.lang/analyze-case (lang.clj:181)\n\thyperfiddle.electric.impl.lang/analyze-case (lang.clj:175)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:414)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:519)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-binding/rec--26769 (lang.clj:162)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:160)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:159)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:536)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:519)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-case/fn--26784/fn--26786 (lang.clj:188)\n\tclojure.core/mapv/fn--8535 (core.clj:6980)\n\tclojure.core.protocols/fn--8249 (protocols.clj:168)\n\tclojure.core.protocols/fn--8249 (protocols.clj:124)\n\tclojure.core.protocols/fn--8204/G--8199--8213 (protocols.clj:19)\n\tclojure.core.protocols/seq-reduce (protocols.clj:31)\n\tclojure.core.protocols/fn--8236 (protocols.clj:75)\n\tclojure.core.protocols/fn--8236 (protocols.clj:75)\n\tclojure.core.protocols/fn--8178/G--8173--8191 (protocols.clj:13)\n\tclojure.core/reduce (core.clj:6887)\n\tclojure.core/mapv (core.clj:6971)\n\tclojure.core/mapv (core.clj:6971)\n\thyperfiddle.electric.impl.lang/analyze-case/fn--26784 (lang.clj:187)\n\tclojure.core/apply (core.clj:669)\n\tclojure.core/apply (core.clj:662)\n\thyperfiddle.electric.impl.lang/analyze-binding/rec--26769 (lang.clj:173)\n\thyperfiddle.electric.impl.lang/analyze-binding/rec--26769 (lang.clj:163)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:160)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:159)\n\thyperfiddle.electric.impl.lang/analyze-case (lang.clj:181)\n\thyperfiddle.electric.impl.lang/analyze-case (lang.clj:175)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:414)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:519)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-binding/rec--26769 (lang.clj:162)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:160)\n\thyperfiddle.electric.impl.lang/analyze-binding (lang.clj:159)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:457)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me/rec--26937 (lang.clj:408)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:407)\n\thyperfiddle.electric.impl.lang/analyze-me (lang.clj:389)\n\thyperfiddle.electric.impl.lang/analyze-me/fn--27042 (lang.clj:546)\n\tclojure.core/mapv/fn--8535 (core.clj:6980)\n\tclojure.lang.ArrayChunk.reduce (ArrayChunk.java:63)\n\tclojure.core.protocols/fn--8244 (protocols.clj:136)\n\tclojure.core.protocols/fn--8244 (protocols.clj:124)\n\tclojure.core.protocols/fn--8204/G--8199--8213 (protocols.clj:19)\n\tclojure.core.protocols/seq-reduce (protocols.clj:31)\n\tclojure.core.protocols/fn--8234 (protocols.clj:75)\n\tclojure.core.protocols/fn--8234 (protocols.clj:75)\n\tclojure.core.protocols/fn--8178/G--8173--8191 (protocols.clj:13)\n\n--------------------------------------------------------------------------------\n 18 | (e/client\n 19 | (let [!show-patient-groups (atom true), show-patient-groups (e/watch !show-patient-groups)\n 20 | pges (e/server (e/offload (fn [] dirty (db/list-pges-by-ehr state/db ehr-id))))\n 21 | active-count (count (filter :is-active pges))]\n--------------------------------------------------------------------------------\n"]],["^ ","^3","~:shadow-prod","^5",["^ ","^7","^;","^9","resources/public/electric/dashboard/js","^D","/dashboard/js","^E",["^ ","^F",["^ ","^G",["^H"],"^I","~$unifhir.dashboard.core/start!"]],"~:module-hash-names",true,"^6","^19"]]],"~:shadow.cljs/http-servers",[],"~:shadow.cljs/repl-streams",[["^ ","~:stream-id","^>","^7",1,"~:target-op","~:clj-eval","~:target-ns","~$shadow.user"]],"~:shadow.cljs/repl-history",[],"~:from",1]	8499	
-19:31:12.576
-["^ ","~:op","~:shadow.cljs/ui-options","~:ui-options",null,"~:from",1]	71	
-19:31:12.580
-["^ ","~:op","~:clients","^1",[["^ ","~:client-id",1,"~:client-info",["^ ","~:connection-info",["^ "],"~:since","~m1744741816685","~:type","~:runtime","~:lang","~:clj","~:desc","JVM Clojure Runtime"]]]]	202	
-19:31:12.608
-["^ ","~:op","~:request-supported-ops","~:to",["~#set",[1]]]	60	
-19:31:12.615
-["^ ","~:op","~:supported-ops","~:ops",["~#set",["~:ping","~:tap-unsubscribe","~:obj-forget","~:shadow.cljs/repl-stream-switch!","~:shadow.cljs/db-sync-init!","~:shadow.cljs/build-watch-start!","~:shadow.cljs.devtools.server.remote-ext/runtime-update","~:shadow.cljs/build-compile!","~:obj-describe","~:tap-subscribe","~:request-tap-history","~:obj-ex-str","~:obj-request","~:obj-edn","~:obj-pprint","~:shadow.cljs.devtools.server.remote-ext/notify","~:explore/namespace-vars","~:obj-get-value","~:shadow.cljs/repl-stream-input!","~:explore/namespaces","~:obj-forget-all","~:clj-eval","~:explore/describe-var","~:shadow.cljs/build-release!","~:shadow.cljs/build-watch-compile!","~:shadow.cljs/build-release-debug!","~:obj-fragment","~:explore/describe-ns","~:shadow.cljs/build-watch-stop!","~:obj-edn-limit","~:shadow.cljs/subscribe","~:obj-str","~:obj-nav","~:shadow.cljs/load-ui-options","~:shadow.cljs/repl-stream-start!"]],"~:from",1]	938	
-19:31:12.622
-["^ ","~:op","~:tap-subscribe","~:to",1,"~:history",true,"~:num",50]	68	
-19:31:12.624
-["^ ","~:op","~:tap-subscribed","~:history",[],"~:from",1]	58	
-19:31:12.711
-["^ ","~:op","~:ping"]	22	
-19:31:17.670
-["^ ","~:op","~:pong"]
-
-

@@ -131,8 +131,9 @@ class ShadowCLJSMonitor {
                     resources: parseInt(buildStatus[':resources']) || 0,
                     compiled: parseInt(buildStatus[':compiled']) || 0,
                     duration: parseFloat(buildStatus[':duration']) || 0,
+                    wibblw: 1,
                     active: buildStatus[':active'] || {},
-                    log: buildStatus[':log'] || [],
+                    log: (buildStatus[':log'] || []).filter(entry => entry.startsWith('Compile CLJS:')),
                     warnings: Array.isArray(buildStatus[':warnings']) ? buildStatus[':warnings'] : []
                   };
                   console.log('[Build Status Updated]:', JSON.stringify(this.lastBuildStatus, null, 2));
@@ -217,30 +218,7 @@ class ShadowCLJSMonitor {
   handleBuildStatusUpdate(msg) {
     console.error('\n[Build Message Received]');
     console.error('Raw message:', JSON.stringify(msg, null, 2));
-    
-    // Handle new message format
-    if (Array.isArray(msg)) {
-      const msgType = msg[0];
-      const buildId = msg[2];
-      const buildStatus = msg[4];
-      
-      if (msgType === ':entity-update' && buildStatus && typeof buildStatus === 'object') {
-        this.lastBuildStatus = {
-          buildId: buildId,
-          status: buildStatus[':status']?.replace(':', '') || 'unknown',
-          timestamp: new Date().toISOString(),
-          resources: parseInt(buildStatus[':resources']) || 0,
-          compiled: parseInt(buildStatus[':compiled']) || 0,
-          duration: parseFloat(buildStatus[':duration']) || null,
-          active: buildStatus[':active'] || {},
-          log: buildStatus[':log'] || [],
-          warnings: buildStatus[':warnings'] || []
-        };
-        console.error('[Build Status Updated]:', JSON.stringify(this.lastBuildStatus, null, 2));
-        return;
-      }
-    }
-    
+
     // Handle old message format
     const buildStatus = msg[':build-status'];
     const buildId = msg[':build-id'];
@@ -267,8 +245,9 @@ class ShadowCLJSMonitor {
         resources: buildStatus[':resources'],
         compiled: buildStatus[':compiled'],
         duration: duration,
+        wibblw: 3,
         active: buildStatus[':active'],
-        log: buildStatus[':log'] || [],
+        log: (buildStatus[':log'] || []).filter(entry => entry.startsWith('Compile CLJS:')),
         report: buildStatus[':report'],
         warnings: buildStatus[':warnings'] || [],
         cycle: info[':compile-cycle']
