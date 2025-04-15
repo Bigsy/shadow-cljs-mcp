@@ -16,16 +16,21 @@ class ShadowCLJSMonitor {
     this.port = port;
   }
 
-  transitMapToObject(map) {
-    const obj = {};
-    if (map && typeof map.get === 'function') {
-      for (let key of map.keys()) {
+  transitMapToObject(val) {
+    if (val && typeof val.get === 'function') {
+      const obj = {};
+      for (let key of val.keys()) {
         const rawKey = key.toString();
-        const val = map.get(key);
-        obj[rawKey] = val && val.toString ? val.toString() : val;
+        const value = val.get(key);
+        obj[rawKey] = this.transitMapToObject(value);
       }
+      return obj;
+    } else if (Array.isArray(val)) {
+      return val.map(v => this.transitMapToObject(v));
+    } else if (val && typeof val.toString === 'function') {
+      return val.toString();
     }
-    return obj;
+    return val;
   }
 
   getLastBuildStatus() {
@@ -44,111 +49,171 @@ class ShadowCLJSMonitor {
   async getServerToken() {
     while (true) {
       try {
-        console.log(`Trying to connect to shadow-cljs at ${this.host}:${this.port}...`);
         const response = await fetch(`http://${this.host}:${this.port}`);
         const html = await response.text();
         
         const tokenMatch = html.match(/<meta\s+content="([^"]+)"\s+name="shadow-remote-token"/);
         if (tokenMatch && tokenMatch[1]) {
-          console.log(`Successfully connected to ${this.host}:${this.port}`);
           return { token: tokenMatch[1], port: this.port };
         }
       } catch (err) {
-        console.log(`Could not connect to ${this.host}:${this.port}: ${err.message}`);
       }
-      console.log('Could not connect to shadow-cljs server, retrying in 2 seconds...');
       await new Promise(resolve => setTimeout(resolve, 2000));
     }
   }
 
   async initWebSocket() {
-    const { token, port } = await this.getServerToken();
-    const ws = new WebSocket(`ws://${this.host}:${port}/api/remote-relay?id=shadow-cljs-monitor&server-token=${token}`);
-    
-    ws.on('open', () => {
-      this.connected = true;
-      const helloMsg = transit.map([
-        transit.keyword('op'), transit.keyword('hello'),
-        transit.keyword('client-info'), transit.map([
-          transit.keyword('type'), transit.keyword('shadow-cljs-ui')
-        ])
-      ]);
-      ws.send(this.writer.write(helloMsg));
+    try {
+      const { token, port } = await this.getServerToken();
+      const ws = new WebSocket(`ws://${this.host}:${port}/api/remote-relay?id=shadow-cljs-monitor&server-token=${token}`);
       
-      const dbSyncMsg = transit.map([
-        transit.keyword('op'), transit.keyword('shadow.cljs/db-sync-init!'),
-        transit.keyword('to'), 1
-      ]);
-      ws.send(this.writer.write(dbSyncMsg));
-    });
+      let initialized = false;
+      
+      ws.on('open', () => {
+        this.connected = true;
+      });
+      
+      ws.on('message', (data) => {
+        try {
+          const decoded = this.reader.read(data);
+          if (!decoded) {
+            return; 
+          }
+          
+          const msg = this.transitMapToObject(decoded);
+          if (!msg) {
+            return;
+          }
+          
+          const op = msg[':op'];
+          
+          if (!initialized && op === ':welcome') {
+            initialized = true;
+            this.sendInitializationMessages(ws);
+          } else if (op === ':shadow.cljs/db-update') {
+            const changes = msg[':changes'];
+            if (!changes || !Array.isArray(changes)) {
+              return;
+            }
 
-    ws.on('message', (data) => {
-      try {
-        const decoded = this.reader.read(data);
-        if (!decoded) return;
-        
-        const msg = this.transitMapToObject(decoded);
-        if (!msg) return;
-
-        if (msg[':op'] === ':shadow.cljs/db-update') {
-          const changes = msg[':changes'];
-          if (changes && typeof changes === 'string') {
-            if (changes.includes(':status => :failed')) {
-              this.lastBuildStatus = {
-                status: 'failed',
-                message: 'Build failed',
-                details: msg,
-                timestamp: new Date().toISOString()
-              };
-            } else if (changes.includes(':status => :completed')) {
-              const resourcesMatch = changes.match(/:resources => (\d+)/);
-              const compiledMatch = changes.match(/:compiled => (\d+)/);
-              const warningsMatch = changes.match(/:warnings => \[([^\]]*)\]/);
-              const durationMatch = changes.match(/:duration => ([\d.]+)/);
-              const logMatch = changes.match(/log => \[(.*?)\]/);
-              
-              // Extract compiled files from log
-              const compiledFiles = [];
-              if (logMatch) {
-                const logContent = logMatch[1];
-                const compileMatches = logContent.match(/Compile CLJS: ([^,]+)/g);
-                if (compileMatches) {
-                  compiledFiles.push(...compileMatches.map(m => m.replace('Compile CLJS: ', '')));
+            for (const change of changes) {
+              if (Array.isArray(change) && 
+                  change[0] === ':entity-update' && 
+                  change[1] === ':shadow.cljs/build' &&
+                  change[3] === ':shadow.cljs/build-status') {
+                
+                const buildStatus = change[4];
+                if (buildStatus && typeof buildStatus === 'object') {
+                  this.lastBuildStatus = {
+                    status: buildStatus[':status']?.toString().replace(':', '') || 'unknown',
+                    timestamp: new Date().toISOString(),
+                    resources: parseInt(buildStatus[':resources']) || 0,
+                    compiled: parseInt(buildStatus[':compiled']) || 0,
+                    duration: parseFloat(buildStatus[':duration']) || 0,
+                    active: buildStatus[':active'] || {},
+                    log: (buildStatus[':log'] || []).filter(entry => entry.startsWith('Compile CLJS:')),
+                    warnings: Array.isArray(buildStatus[':warnings']) ? buildStatus[':warnings'] : [],
+                    report: buildStatus[':report']
+                  };
                 }
               }
-
-              if (resourcesMatch && compiledMatch && warningsMatch && durationMatch) {
-                this.lastBuildStatus = {
-                  status: 'completed',
-                  resources: parseInt(resourcesMatch[1]),
-                  compiled: parseInt(compiledMatch[1]),
-                  warnings: warningsMatch[1].length ? warningsMatch[1].split(',').length : 0,
-                  duration: parseFloat(durationMatch[1]),
-                  timestamp: new Date().toISOString(),
-                  compiledFiles: compiledFiles
-                };
-              }
             }
+          } else if (op === ':shadow.cljs.model/sub-msg') {
+            this.handleBuildStatusUpdate(msg);
+          } else if (op === ':ping') {
+            const pongMsg = transit.map([transit.keyword('op'), transit.keyword('pong')]);
+            const encoded = this.writer.write(pongMsg);
+            ws.send(encoded);
           }
+        } catch (err) {
+          console.error('Error processing message:', err);
         }
+      });
 
-        if (msg[':op'] === ':ping') {
-          const pongMsg = transit.map([transit.keyword('op'), transit.keyword('pong')]);
-          ws.send(this.writer.write(pongMsg));
-        }
-      } catch (err) {
-        console.error('Error processing message:', err);
-      }
-    });
+      ws.on('error', (err) => {
+        console.error('WebSocket error:', err);
+      });
 
-    ws.on('error', (err) => {
-      console.error('WebSocket error:', err);
-    });
-
-    ws.on('close', () => {
-      this.connected = false;
+      ws.on('close', () => {
+        this.connected = false;
+        initialized = false;
+        setTimeout(() => this.initWebSocket(), 2000);
+      });
+    } catch (err) {
+      console.error('Failed to initialize WebSocket:', err);
       setTimeout(() => this.initWebSocket(), 2000);
-    });
+    }
+  }
+
+  sendInitializationMessages(ws) {
+    const sendMessage = (msg) => {
+      const encoded = this.writer.write(msg);
+      ws.send(encoded);
+    };
+
+    // Send hello
+    const helloMsg = transit.map([
+      transit.keyword('op'), transit.keyword('hello'),
+      transit.keyword('client-info'), transit.map([
+        transit.keyword('type'), transit.keyword('shadow-cljs-ui')
+      ])
+    ]);
+    sendMessage(helloMsg);
+
+    // Subscribe to supervisor updates
+    const supervisorMsg = transit.map([
+      transit.keyword('op'), transit.keyword('shadow.cljs.model/subscribe'),
+      transit.keyword('to'), 1,
+      transit.keyword('shadow.cljs.model/topic'), transit.keyword('shadow.cljs.model/supervisor')
+    ]);
+    sendMessage(supervisorMsg);
+
+    // Subscribe to build status updates
+    const buildStatusMsg = transit.map([
+      transit.keyword('op'), transit.keyword('shadow.cljs.model/subscribe'),
+      transit.keyword('to'), 1,
+      transit.keyword('shadow.cljs.model/topic'), transit.keyword('shadow.cljs.model/build-status-update')
+    ]);
+    sendMessage(buildStatusMsg);
+
+    // Initialize sync
+    const dbSyncMsg = transit.map([
+      transit.keyword('op'), transit.keyword('shadow.cljs/db-sync-init!'),
+      transit.keyword('to'), 1
+    ]);
+    sendMessage(dbSyncMsg);
+  }
+
+  handleBuildStatusUpdate(msg) {
+    const buildStatus = msg[':build-status'];
+    const buildId = msg[':build-id'];
+    if (buildStatus) {
+      const status = buildStatus[':status'];
+      const info = buildStatus[':info'] || {};
+      const timings = info[':timings'] || {};
+      
+      let duration = null;
+      if (timings[':compile-finish'] && timings[':compile-prepare']) {
+        duration = (
+          parseInt(timings[':compile-finish'][':exit']) - 
+          parseInt(timings[':compile-prepare'][':enter'])
+        ) / 1000.0;
+      }
+      
+      this.lastBuildStatus = {
+        buildId: buildId,
+        status: status.replace(':', ''),
+        timestamp: new Date().toISOString(),
+        resources: buildStatus[':resources'],
+        compiled: buildStatus[':compiled'],
+        duration: duration,
+        active: buildStatus[':active'],
+        log: (buildStatus[':log'] || []).filter(entry => entry.startsWith('Compile CLJS:')),
+        report: buildStatus[':report'],
+        warnings: buildStatus[':warnings'] || [],
+        cycle: info[':compile-cycle']
+      };
+    }
   }
 }
 
@@ -227,7 +292,6 @@ class ShadowCLJSServer {
     await this.server.connect(transport);
     console.error('Shadow CLJS MCP server running on stdio');
     
-    // Start WebSocket connection in the background
     this.monitor.initWebSocket().catch(err => {
       console.error('Failed to initialize WebSocket:', err);
     });

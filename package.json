@@ -1,6 +1,6 @@
 {
   "name": "shadow-cljs-mcp",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A Model Context Protocol server for monitoring shadow-cljs builds",
   "main": "index.js",
   "type": "module",
