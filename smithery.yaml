@@ -1,0 +1,28 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required: []
+    properties:
+      host:
+        type: string
+        default: localhost
+        description: The host where shadow-cljs is running.
+      port:
+        type: number
+        default: 9630
+        description: The port where shadow-cljs is running.
+  commandFunction:
+    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    |-
+    (config) => ({
+      command: 'node',
+      args: ['index.js', '--host', config.host || 'localhost', '--port', (config.port || 9630).toString()],
+      env: process.env
+    })
+  exampleConfig:
+    host: localhost
+    port: 9630
