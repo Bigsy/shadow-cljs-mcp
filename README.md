@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/bigsy-shadow-cljs-mcp-badge.png)](https://mseep.ai/app/bigsy-shadow-cljs-mcp)
+
 # shadow-cljs-mcp
 
 [![npm version](https://badge.fury.io/js/shadow-cljs-mcp.svg)](https://badge.fury.io/js/shadow-cljs-mcp)
